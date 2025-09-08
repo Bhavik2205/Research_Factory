@@ -125,3 +125,103 @@ type AddOrderWithMPIDAttribution struct {
 
 // 1.4 Modify Order Messages
 // 1.4.1 Order ExecutedMessage ("E")
+type OrderExecuted struct {
+	Header               MessageHeader
+	OrderReferenceNumber uint64 // 8 bytes
+	ExecutedShares       uint32 // 4 bytes
+	MatchNumber          uint64 // 8 bytes
+}
+
+// 1.4.2 Order Executed with Price Message ("C")
+type OrderExecutedWithPrice struct {
+	Header               MessageHeader
+	OrderReferenceNumber uint64 // 8 bytes
+	ExecutedShares       uint32 // 4 bytes
+	MatchNumber          uint64 // 8 bytes
+	Printable            byte   // 1 byte
+	ExecutionPrice       uint32 // 4 bytes
+}
+
+// 1.4.3 Order Cancel Message ("X")
+type OrderCancel struct {
+	Header               MessageHeader
+	OrderReferenceNumber uint64 // 8 bytes
+	CanceledShares       uint32 // 4 bytes
+}
+
+// 1.4.4 Order Delete Message ("D")
+type OrderDelete struct {
+	Header               MessageHeader
+	OrderReferenceNumber uint64 // 8 bytes
+}
+
+// 1.4.5 Order Replace Message ("U")
+type OrderReplace struct {
+	Header                 MessageHeader
+	OriginalOrderRefNumber uint64 // 8 bytes
+	NewOrderRefNumber      uint64 // 8 bytes
+	Shares                 uint32 // 4 bytes
+	Price                  uint32 // 4 bytes
+}
+
+// 1.5 Trade Messages
+// 1.5.1 Trade Message (Non-Cross) ("P")
+type TradeMessageNonCross struct {
+	Header               MessageHeader
+	OrderReferenceNumber uint64 // 8 bytes
+	BuySellIndicator     byte   // 1 byte
+	Shares               uint32 // 4 bytes
+	Stock                string // 8 bytes
+	Price                uint32 // 4 bytes
+	MatchNumber          uint64 // 8 bytes
+}
+
+// 1.5.2 Cross Trade Message ("Q")
+type CrossTradeMessage struct {
+	Header      MessageHeader
+	Shares      uint64 // 8 bytes
+	Stock       string // 8 bytes
+	CrossPrice  uint32 // 4 bytes
+	MatchNumber uint64 // 8 bytes
+	CrossType   byte   // 1 byte
+}
+
+// 1.5.3 Broken Trade Message ("B") / Order Execution Message
+type BrokenTradeMessage struct {
+	Header      MessageHeader
+	MatchNumber uint64 // 8 bytes
+}
+
+//1.6 Net Order Imbalance Indicator (NOII) Messages ("I")
+type NetOrderImbalanceIndicator struct {
+	Header                  MessageHeader
+	PairedShares            uint64 // 8 bytes
+	ImbalanceShares         uint64 // 8 bytes
+	ImbalanceDirection      byte   // 1 byte
+	Stock                   string // 8 bytes
+	FarPrice                uint32 // 4 bytes
+	NearPrice               uint32 // 4 bytes
+	CurrentReferencePrice   uint32 // 4 bytes
+	CrossType               byte   // 1 byte
+	PriceVariationIndicator byte   // 1 byte
+}
+
+//1.7 Retail Price Improvement (RPI) Indicator Message ("N")
+type RetailPriceImprovementIndicator struct {
+	Header       MessageHeader
+	Stock        string // 8 bytes
+	InterestFlag byte   // 1 byte
+}
+
+//1.8 Direct Listing with Capital Raise Price Discovery Message ("O")
+type DirectListingWithCapitalRaisePriceDiscovery struct {
+	Header                MessageHeader
+	Stock                 string // 8 bytes
+	OpenEligibilityStatus byte   // 1 byte
+	MinimumAllowablePrice uint32 // 4 bytes
+	MaximumAllowablePrice uint32 // 4 bytes
+	NearExecutionPrice    uint32 // 4 bytes
+	NearExecutionTime     uint64 // 8 bytes
+	LowerPriceRangeCollar uint32 // 4 bytes
+	UpperPriceRangeCollar uint32 // 4 bytes
+}
